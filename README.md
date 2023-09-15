@@ -1,7 +1,7 @@
 crew member sentry notification plugin
 ===
 
-机组使用的[sentry-onpremise](https://github.com/getsentry/onpremise)使用的通知插件
+机组使用的[sentry-onpremise](https://github.com/getsentry/onpremise)的通知插件
 
 目前包含了
 
@@ -28,7 +28,8 @@ sentry测试版本：`23.3.1`
 pip install csnp==0.0.7
 ```
 
-> 莫名其妙的就从0.0.1到了0.0.7，因为没研究出来怎么在本地debug，调试只能每次上传到pypi以后，构建se
+> 莫名其妙的就从0.0.1到了0.0.7，因为没研究出来怎么在本地debug，调试只能每次上传到pypi以后，构建sentry测试
+
 > 有知道的朋友麻烦告诉我怎么本地调试sentry，跪谢
 
 2. 构建并重启sentry
