@@ -22,9 +22,10 @@ dingtalk_webhook = "https://oapi.dingtalk.com/robot/send?access_token="
 # 基于django的页面表单
 class CrewForm(forms.Form):
     '''token的表单'''
-    key = forms.CharField(max_length=255, help_text='企业微信机器人的key')
+    key = forms.CharField(
+        max_length=255, help_text='企业微信机器人的key', required=False)
     access_token = forms.CharField(
-        max_length=255, help_text='钉钉机器人的access_token')
+        max_length=255, help_text='钉钉机器人的access_token', required=False)
 
 
 class CrewPlugin(NotificationPlugin):
@@ -59,13 +60,15 @@ class CrewPlugin(NotificationPlugin):
 
         if len(urls) == 0:
             self.logger.info('wechat key or dingtalk token config error')
-
+            return None
         if self.should_notify(group, event):
             self.logger.info('now send msg to crew member')
             for url in urls:
                 self.send_msg(group, event, url, *args, **kwargs)
+                return 'success'
         else:
             self.logger.info('no need send msg to crew member')
+            return None
 
     def send_msg(self, group, event, url, *args, **kwargs):
         '''发送消息'''
@@ -74,15 +77,22 @@ class CrewPlugin(NotificationPlugin):
         base_url = group.get_absolute_url()
         event_id = event.event_id if hasattr(event, 'event_id') else event.id
         check_url = base_url + 'events/' + event_id
-
-        data = {
-            "msgtype": 'markdown',
-            "markdown": {
-                "title": error_title,
-                "text": f"#### {error_title} \n\n > {event.message} \n\n [点击查看问题]({check_url})"
+        data = {}
+        if 'weixin' in url:
+            data = {
+                "msgtype": 'markdown',
+                "markdown": {
+                    "content": f"#### {error_title} \n\n > {event.message} \n\n [点击查看问题]({check_url})"
+                }
             }
-        }
-
+        if 'dingtalk' in url:
+            data = {
+                "msgtype": 'markdown',
+                "markdown": {
+                    "title": error_title,
+                    "text": f"#### {error_title} \n\n > {event.message} \n\n [点击查看问题]({check_url})"
+                }
+            }
         requests.post(url=url,
                       headers={'Content-Type': 'application/json'},
                       data=json.dumps(data).encode('utf-8'),

@@ -12,7 +12,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="csnp",
-    version='0.0.1',
+    version='0.0.7',
     author='zhouwei',
     author_email='xiaomao361@163.com',
     url='https://github.com/xiaomao361/csnp',
