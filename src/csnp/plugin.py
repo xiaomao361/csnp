@@ -82,7 +82,20 @@ class CrewPlugin(NotificationPlugin):
             data = {
                 "msgtype": 'markdown',
                 "markdown": {
-                    "content": f"#### {error_title} \n\n > {event.message} \n\n [点击查看问题]({check_url})"
+                    "content": f"### {error_title} \n\
+                    >报警 \n\
+                    --------- \n\
+                    *{event.type}* \n\
+                    datetime: {event.dateCreated}  id: {event.id} \n\
+                    错误信息 \n\
+                    ```yaml \n\
+                    {event.message} \n\
+                    ``` \n\
+                    平台: {event.platform} \n\
+                    标签 \n\
+                    ```yaml \n\
+                    {event.tags} \n\
+                    ```"
                 }
             }
         if 'dingtalk' in url:
